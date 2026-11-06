@@ -1,0 +1,21 @@
+diff --git a/bsd/kern/bsd_init.c b/bsd/kern/bsd_init.c
+index b83a4e5..b0b2963 100644
+--- a/bsd/kern/bsd_init.c
++++ b/bsd/kern/bsd_init.c
+@@ -491,7 +491,7 @@ bsd_init(void)
+ 	platform_stall_panic_or_spin(PLATFORM_STALL_XNU_LOCATION_BSD_INIT);
+ #endif
+ 
+-#define DEBUG_BSDINIT 0
++#define DEBUG_BSDINIT 1
+ 
+ #if DEBUG_BSDINIT
+ #define bsd_init_kprintf(x, ...) kprintf("bsd_init: " x, ## __VA_ARGS__)
+@@ -1099,6 +1099,7 @@ bsdinit_task(void)
+ 
+ 	bsd_init_kprintf("bsd_do_post - done");
+ 
++	printf("K60STAGE: load_init_program\n");
+ 	load_init_program(p);
+ 	lock_trace = 1;
+ }
