@@ -1,14 +1,14 @@
 diff --git a/osfmk/kern/debug.c b/osfmk/kern/debug.c
-index d1e49bf..b28bba5 100644
+index d1e49bf..d825367 100644
 --- a/osfmk/kern/debug.c
 +++ b/osfmk/kern/debug.c
-@@ -1467,6 +1467,21 @@ debugger_collect_diagnostics(unsigned int exception, unsigned int code, unsigned
+@@ -1467,6 +1467,20 @@ debugger_collect_diagnostics(unsigned int exception, unsigned int code, unsigned
  	}
  
  	paniclog_append_noflush("\nPlease go to https://panic.apple.com to report this panic\n");
 +
-+	/* K60PANIC: the stackshot above scrolls the message off this panel, so print it again
-+	 * (twice, in case one gets scrolled) immediately before the kernel stops. */
++	/* K60PANIC: the stackshot above scrolls the message off this panel, so print the reason
++	 * 60 times: the last screenful is then all panic text and any photo shows it. */
 +	for (int pass = 0; pass < 60; pass++) {
 +		panic_debugger_log("K60PANIC[%d/60]: panic(cpu %u caller 0x%lx): ", pass + 1,
 +		    (unsigned)cpu_number(), debugger_panic_caller);
