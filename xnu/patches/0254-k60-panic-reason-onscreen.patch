@@ -9,9 +9,8 @@ index d1e49bf..b28bba5 100644
 +
 +	/* K60PANIC: the stackshot above scrolls the message off this panel, so print it again
 +	 * (twice, in case one gets scrolled) immediately before the kernel stops. */
-+	for (int pass = 0; pass < 2; pass++) {
-+		panic_debugger_log("\nK60PANIC: ===== panic reason =====\n");
-+		panic_debugger_log("K60PANIC: panic(cpu %u caller 0x%lx): ",
++	for (int pass = 0; pass < 60; pass++) {
++		panic_debugger_log("K60PANIC[%d/60]: panic(cpu %u caller 0x%lx): ", pass + 1,
 +		    (unsigned)cpu_number(), debugger_panic_caller);
 +		if (debugger_panic_str) {
 +#pragma clang diagnostic push
@@ -19,7 +18,7 @@ index d1e49bf..b28bba5 100644
 +			_doprnt(debugger_panic_str, debugger_panic_args, consdebug_putc, 0);
 +#pragma clang diagnostic pop
 +		}
-+		panic_debugger_log("\nK60PANIC: ========================\n");
++		panic_debugger_log("\n");
 +	}
  	panic_spin_forever();
  }
