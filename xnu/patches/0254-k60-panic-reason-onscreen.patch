@@ -1,0 +1,26 @@
+diff --git a/osfmk/kern/debug.c b/osfmk/kern/debug.c
+index d1e49bf..b28bba5 100644
+--- a/osfmk/kern/debug.c
++++ b/osfmk/kern/debug.c
+@@ -1467,6 +1467,21 @@ debugger_collect_diagnostics(unsigned int exception, unsigned int code, unsigned
+ 	}
+ 
+ 	paniclog_append_noflush("\nPlease go to https://panic.apple.com to report this panic\n");
++
++	/* K60PANIC: the stackshot above scrolls the message off this panel, so print it again
++	 * (twice, in case one gets scrolled) immediately before the kernel stops. */
++	for (int pass = 0; pass < 2; pass++) {
++		panic_debugger_log("\nK60PANIC: ===== panic reason =====\n");
++		panic_debugger_log("K60PANIC: panic(cpu %u caller 0x%lx): ",
++		    (unsigned)cpu_number(), debugger_panic_caller);
++		if (debugger_panic_str) {
++#pragma clang diagnostic push
++#pragma clang diagnostic ignored "-Wformat-nonliteral"
++			_doprnt(debugger_panic_str, debugger_panic_args, consdebug_putc, 0);
++#pragma clang diagnostic pop
++		}
++		panic_debugger_log("\nK60PANIC: ========================\n");
++	}
+ 	panic_spin_forever();
+ }
+ 
